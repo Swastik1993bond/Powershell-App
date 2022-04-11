@@ -9,6 +9,9 @@ $form.StartPosition = 'CenterScreen'
 $form.Font = "Arial"
 $form.BackgroundImage = $Image
 
+$Icon = New-Object system.drawing.icon ("G:\Powershell-App\bot.ico")
+$form.Icon = $Icon
+
 $Font = New-Object System.Drawing.Font("Times New Roman",12,[System.Drawing.FontStyle]::Bold)
 $Fon2 = New-Object System.Drawing.Font("Arial",8,[System.Drawing.FontStyle]::Bold)
 
