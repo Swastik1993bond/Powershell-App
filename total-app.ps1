@@ -8,6 +8,7 @@ $form.Size = New-Object System.Drawing.Size(500,500)
 $form.StartPosition = 'CenterScreen'
 $form.Font = "Arial"
 $form.BackgroundImage = $Image
+$form.autosize = "True"
 
 $Icon = New-Object system.drawing.icon ("G:\Powershell-App\bot.ico")
 $form.Icon = $Icon
@@ -43,7 +44,6 @@ $btnpr.ForeColor = "green"
 $btnpr.Font = $Fon2
 $form.AcceptButton = $btnpr
 $form.Controls.Add($btnpr)
-
 
 $btndisk = New-Object System.Windows.Forms.Button
 $btndisk.Location = New-Object System.Drawing.Point(50,170)
@@ -94,6 +94,21 @@ $btnlrgfil.Font = $Fon2
 $btnlrgfil.backColor = "orange"
 $form.AcceptButton = $btnlrgfil
 $form.Controls.Add($btnlrgfil)
+
+$textBox = New-Object System.Windows.Forms.TextBox
+$textBox.Location = New-Object System.Drawing.Point(250,200) ### Location of the text box
+$textBox.Size = New-Object System.Drawing.Size(200,25) ### Size of the text box ### Allows multiple lines of data ### By hitting enter it creates a new line ### Allows for a vertical scroll bar if the list of text is too big for the window
+$form.Controls.Add($textBox)
+
+$btok = New-Object System.Windows.Forms.Button
+$btok.Location = New-Object System.Drawing.Point(250,170)
+$btok.Size = New-Object System.Drawing.Size(200,25)
+$btok.Text = 'Enter process to Kill'
+$btok.DialogResult = [System.Windows.Forms.DialogResult]::OK
+$btok.Font = $Fon2
+$btok.backColor = "white"
+$form.AcceptButton = $btok
+$form.Controls.Add($btok)
 
 $bt = New-Object System.Windows.Forms.Button
 $bt.Location = New-Object System.Drawing.Point(250,120)
@@ -168,7 +183,7 @@ $btnnetinfo.Add_Click({
 })
 
 $btnlrgfil.Add_Click({
-    gci -r|sort -descending -property length | select -first 10 name,Directoryname,@{Name="Gigabytes";Expression={[Math]::round($_.length / 1GB, 2)}}|out-gridview
+    gci -r|sort -descending -property length | select -first 20 name,Directoryname,@{Name="Gigabytes";Expression={[Math]::round($_.length / 1GB, 2)}}|out-gridview
    })
 
 $bt.Add_Click({
@@ -185,3 +200,10 @@ Created by : Swastik Mukherjee, E-mail to: swastikmukherjee276@gmail.com "|out-g
    })
 
 $result = $form.ShowDialog()
+
+if ($result -eq [System.Windows.Forms.DialogResult]::OK)
+    {
+        $x = $textBox.Text
+        stop-process -ID $x -force 
+        echo "The process $x is killed = $?" | Out-GridView
+    }
